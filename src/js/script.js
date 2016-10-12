@@ -1,7 +1,7 @@
 "use strict";
 
 function getDatafromURL(url) {
-  let httpreq = new XMLHttpRequest();
+  var httpreq = new XMLHttpRequest();
   httpreq.open("GET", url, false);
   httpreq.send(null);
   return httpreq.responseText;
@@ -13,46 +13,44 @@ function prepareQuestion(url) {
 }
 
 function getAnswerCode(questionOBJ) {
-  let checkArray = [];
+  var checkArray = [];
   _.each(questionOBJ, function (question, i) {
     checkArray[i] = [];
     _.each(question.answers, function (answers) {
       checkArray[i].push(!!+answers.substr(0, 1)); // Convert '0' and '1' to boolean
-    })
+    });
   });
   return checkArray;
 }
 
 function getCheckboxState() {
-  let checkBox = document.getElementsByClassName("answer__list");
-  let checkBoxArray = [];
+  var checkBox = document.getElementsByClassName("answer__list");
+  var checkBoxArray = [];
   _.each(checkBox, function (checkbox, i) {
     checkBoxArray[i] = [];
     _.each(checkbox.getElementsByTagName('input'), function (input) {
       checkBoxArray[i].push(input.checked + "");
-    })
+    });
   });
   return checkBoxArray;
 }
 
 function generateResult(correctAnswers, totalAnswers) {
   if (correctAnswers == totalAnswers) {
-    return "Поздравляем! Вы правильно ответили на все вопросы."
-  }
-  else {
+    return "Поздравляем! Вы правильно ответили на все вопросы.";
+  } else {
     if (correctAnswers == 0) {
-      return "Вы не смогли ответить правильно ни на один вопрос :("
-    }
-    else {
-      return `Вы ответили правильно на ${correctAnswers} из ${totalAnswers} вопросов.`;
+      return "Вы не смогли ответить правильно ни на один вопрос :(";
+    } else {
+      return "\u0412\u044B \u043E\u0442\u0432\u0435\u0442\u0438\u043B\u0438 \u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u043E \u043D\u0430 " + correctAnswers + " \u0438\u0437 " + totalAnswers + " \u0432\u043E\u043F\u0440\u043E\u0441\u043E\u0432.";
     }
   }
 }
 
 function checkAnswer() {
-  let checkboxState = getCheckboxState();
-  let answerCode = getAnswerCode(questionOBJ);
-  let correctAnswers = 0;
+  var checkboxState = getCheckboxState();
+  var answerCode = getAnswerCode(questionOBJ);
+  var correctAnswers = 0;
   if (checkboxState.length == answerCode.length) {
     _.each(checkboxState, function (checkbox, i) {
       if (checkbox.toString() == answerCode[i].toString()) {
@@ -60,17 +58,17 @@ function checkAnswer() {
       }
     });
   }
-  let result = generateResult(correctAnswers, answerCode.length);
+  var result = generateResult(correctAnswers, answerCode.length);
   outputResult(result);
 }
 
 function outputResult(result) {
-  let modal = document.getElementById('myModal');
-  let span = document.getElementsByClassName("close")[0];
-  let start = document.getElementById("start");
-  let modalBody = document.getElementsByClassName("modal-body")[0];
+  var modal = document.getElementById('myModal');
+  var span = document.getElementsByClassName("close")[0];
+  var start = document.getElementById("start");
+  var modalBody = document.getElementsByClassName("modal-body")[0];
 
-  modalBody.innerHTML = `<h2>${result}</h2>`;
+  modalBody.innerHTML = "<h2>" + result + "</h2>";
   modal.style.display = "block";
 
   span.onclick = function () {
@@ -86,41 +84,41 @@ function outputResult(result) {
     if (event.target == modal) {
       modal.style.display = "none";
     }
-  }
+  };
 }
 
 function generateDOM() {
-  let blockTitle = document.createElement("h1");
+  var blockTitle = document.createElement("h1");
   blockTitle.innerHTML = "Тест по программированию";
   blockTitle.className = "page-title";
   document.body.appendChild(blockTitle);
 
-  let questionList = document.createElement("ol");
+  var questionList = document.createElement("ol");
   document.body.appendChild(questionList);
   _.each(questionOBJ, function (question) {
-    let questionItem = document.createElement("li");
+    var questionItem = document.createElement("li");
     questionItem.className = "question-block";
     questionList.appendChild(questionItem);
-    let blockQuestion = document.createElement("h2");
+    var blockQuestion = document.createElement("h2");
     blockQuestion.innerHTML = question.question;
     blockQuestion.className = "question";
     questionItem.appendChild(blockQuestion);
-    let list = document.createElement("ul");
+    var list = document.createElement("ul");
     list.className = "answer__list";
     questionItem.appendChild(list);
     _.each(question.answers, function (answers) {
-      let listItem = document.createElement("li");
-      let listInput = document.createElement("input");
-      let listLabel = document.createElement("label");
+      var listItem = document.createElement("li");
+      var listInput = document.createElement("input");
+      var listLabel = document.createElement("label");
       listInput.setAttribute("type", "checkbox");
       listItem.className = "answer__item";
       listLabel.innerHTML = answers.substr(2);
       list.appendChild(listItem);
       listItem.appendChild(listLabel);
       listLabel.insertBefore(listInput, listLabel.firstChild);
-    })
+    });
   });
-  let blockButton = document.createElement("button");
+  var blockButton = document.createElement("button");
   blockButton.addEventListener('click', checkAnswer);
   blockButton.innerHTML = "Проверить мои результаты";
   blockButton.className = "button";
@@ -135,10 +133,3 @@ function startTest() {
 var url = 'http://10.skm.pp.ua/js-21-22/src/question.json';
 var questionOBJ = prepareQuestion(url);
 startTest();
-
-
-
-
-
-
-
